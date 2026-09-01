@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import "simple_compiler/parser"
 
 func main() {
-	fmt.Println("Olá, Go!")
+	input := "8+5-7+9"
+
+	p := parser.NewParser([]byte(input))
+
+	p.Parse()
 }
