@@ -7,4 +7,4 @@ RUN go mod download
 
 COPY . .
 
-CMD ["go", "run", "./cmd/simple_compiler"]
+CMD ["go", "run", "./cmd/compiler"]
