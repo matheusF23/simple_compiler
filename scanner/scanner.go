@@ -29,19 +29,31 @@ func (s *Scanner) advance() {
 	}
 }
 
-func (s *Scanner) NextToken() byte {
+func (s *Scanner) NextToken() string {
 	ch := s.peek()
 
-	if unicode.IsDigit(rune(ch)) {
+	if ch == '0' {
 		s.advance()
-		return ch
+		return string(ch)
+	} else if unicode.IsDigit(rune(ch)) {
+		return s.number()
 	}
 
 	switch ch {
 	case '+', '-':
 		s.advance()
-		return ch
+		return string(ch)
 	}
 
-	return '\x00'
+	panic("lexical error")
+}
+
+func (s *Scanner) number() string {
+	start := s.current
+
+	for unicode.IsDigit(rune(s.peek())) {
+		s.advance()
+	}
+
+	return string(s.input[start:s.current])
 }
