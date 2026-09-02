@@ -3,7 +3,7 @@ package main
 import "simple_compiler/parser"
 
 func main() {
-	input := "89+508-7+99"
+	input := "45  + 89   -       876"
 
 	p := parser.NewParser([]byte(input))
 

@@ -47,6 +47,8 @@ func (s *Scanner) number() token.Token {
 }
 
 func (s *Scanner) NextToken() token.Token {
+	s.skipWhitespace()
+
 	ch := s.peek()
 
 	if ch == '0' {
@@ -74,5 +76,14 @@ func (s *Scanner) NextToken() token.Token {
 
 	default:
 		panic(fmt.Sprintf("lexical error at %c", ch))
+	}
+}
+
+func (s *Scanner) skipWhitespace() {
+	ch := s.peek()
+
+	for unicode.IsSpace(rune(ch)) {
+		s.advance()
+		ch = s.peek()
 	}
 }
