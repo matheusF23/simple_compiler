@@ -3,37 +3,30 @@ package parser
 import (
 	"fmt"
 	"unicode"
+
+	"simple_compiler/scanner"
 )
 
 type Parser struct {
-	input   []byte
-	current int
+	scan         *scanner.Scanner
+	currentToken byte
 }
 
 func NewParser(input []byte) *Parser {
+	scan := scanner.NewScanner(input)
+
 	return &Parser{
-		input: input,
+		scan:         scan,
+		currentToken: scan.NextToken(),
 	}
+}
+
+func (p *Parser) nextToken() {
+	p.currentToken = p.scan.NextToken()
 }
 
 func (p *Parser) Parse() {
 	p.expr()
-}
-
-func (p *Parser) peek() byte {
-	if p.current < len(p.input) {
-		return p.input[p.current]
-	}
-
-	return '\x00'
-}
-
-func (p *Parser) match(c byte) {
-	if c == p.peek() {
-		p.current++
-	} else {
-		panic("syntax error")
-	}
 }
 
 func (p *Parser) expr() {
@@ -41,22 +34,31 @@ func (p *Parser) expr() {
 	p.oper()
 }
 
+func (p *Parser) match(t byte) {
+	if p.currentToken == t {
+		p.nextToken()
+	} else {
+		panic("syntax error")
+	}
+}
+
 func (p *Parser) digit() {
-	if unicode.IsDigit(rune(p.peek())) {
-		fmt.Println("push", string(p.peek()))
-		p.match(p.peek())
+	if unicode.IsDigit(rune(p.currentToken)) {
+		fmt.Println("push", string(p.currentToken))
+		p.match(p.currentToken)
 	} else {
 		panic("syntax error")
 	}
 }
 
 func (p *Parser) oper() {
-	if p.peek() == '+' {
+	switch p.currentToken {
+	case '+':
 		p.match('+')
 		p.digit()
 		fmt.Println("add")
 		p.oper()
-	} else if p.peek() == '-' {
+	case '-':
 		p.match('-')
 		p.digit()
 		fmt.Println("sub")
