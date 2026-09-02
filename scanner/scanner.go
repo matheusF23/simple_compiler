@@ -1,6 +1,11 @@
 package scanner
 
-import "unicode"
+import (
+	"fmt"
+	"unicode"
+
+	"simple_compiler/token"
+)
 
 type Scanner struct {
 	input   []byte
@@ -29,31 +34,45 @@ func (s *Scanner) advance() {
 	}
 }
 
-func (s *Scanner) NextToken() string {
-	ch := s.peek()
-
-	if ch == '0' {
-		s.advance()
-		return string(ch)
-	} else if unicode.IsDigit(rune(ch)) {
-		return s.number()
-	}
-
-	switch ch {
-	case '+', '-':
-		s.advance()
-		return string(ch)
-	}
-
-	panic("lexical error")
-}
-
-func (s *Scanner) number() string {
+func (s *Scanner) number() token.Token {
 	start := s.current
 
 	for unicode.IsDigit(rune(s.peek())) {
 		s.advance()
 	}
 
-	return string(s.input[start:s.current])
+	n := string(s.input[start:s.current])
+
+	return token.NewToken(token.NUMBER, n)
+}
+
+func (s *Scanner) NextToken() token.Token {
+	ch := s.peek()
+
+	if ch == '0' {
+		s.advance()
+
+		return token.NewToken(
+			token.NUMBER,
+			string(ch),
+		)
+	} else if unicode.IsDigit(rune(ch)) {
+		return s.number()
+	}
+
+	switch ch {
+	case '+':
+		s.advance()
+		return token.NewToken(token.PLUS, "+")
+
+	case '-':
+		s.advance()
+		return token.NewToken(token.MINUS, "-")
+
+	case '\x00':
+		return token.NewToken(token.EOF, "EOF")
+
+	default:
+		panic(fmt.Sprintf("lexical error at %c", ch))
+	}
 }
