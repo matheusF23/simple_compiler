@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 
 	"simple_compiler/scanner"
 	"simple_compiler/token"
@@ -10,6 +11,7 @@ import (
 type Parser struct {
 	scan         *scanner.Scanner
 	currentToken token.Token
+	output       []string
 }
 
 func NewParser(input []byte) *Parser {
@@ -19,6 +21,15 @@ func NewParser(input []byte) *Parser {
 		scan:         scan,
 		currentToken: scan.NextToken(),
 	}
+}
+
+func (p *Parser) emit(command string) {
+	fmt.Println(command)
+	p.output = append(p.output, command)
+}
+
+func (p *Parser) Output() string {
+	return strings.Join(p.output, "\n")
 }
 
 func (p *Parser) Parse() {
@@ -31,7 +42,7 @@ func (p *Parser) expr() {
 }
 
 func (p *Parser) number() {
-	fmt.Println("push", p.currentToken.Lexeme)
+	p.emit("push " + p.currentToken.Lexeme)
 	p.match(token.NUMBER)
 }
 
@@ -45,7 +56,7 @@ func (p *Parser) letStatement() {
 
 	p.expr()
 
-	fmt.Println("pop", id)
+	p.emit("pop " + id)
 
 	p.match(token.SEMICOLON)
 }
@@ -53,7 +64,7 @@ func (p *Parser) letStatement() {
 func (p *Parser) printStatement() {
 	p.match(token.PRINT)
 	p.expr()
-	fmt.Println("print")
+	p.emit("print")
 	p.match(token.SEMICOLON)
 }
 
@@ -79,7 +90,7 @@ func (p *Parser) term() {
 	case token.NUMBER:
 		p.number()
 	case token.IDENT:
-		fmt.Println("push", p.currentToken.Lexeme)
+		p.emit("push " + p.currentToken.Lexeme)
 		p.match(token.IDENT)
 	default:
 		panic("syntax error")
@@ -91,12 +102,12 @@ func (p *Parser) oper() {
 	case token.PLUS:
 		p.match(token.PLUS)
 		p.term()
-		fmt.Println("add")
+		p.emit("add")
 		p.oper()
 	case token.MINUS:
 		p.match(token.MINUS)
 		p.term()
-		fmt.Println("sub")
+		p.emit("sub")
 		p.oper()
 	}
 }
