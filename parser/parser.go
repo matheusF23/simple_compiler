@@ -22,7 +22,7 @@ func NewParser(input []byte) *Parser {
 }
 
 func (p *Parser) Parse() {
-	p.expr()
+	p.letStatement()
 }
 
 func (p *Parser) expr() {
@@ -33,6 +33,21 @@ func (p *Parser) expr() {
 func (p *Parser) number() {
 	fmt.Println("push", p.currentToken.Lexeme)
 	p.match(token.NUMBER)
+}
+
+func (p *Parser) letStatement() {
+	p.match(token.LET)
+
+	id := p.currentToken.Lexeme
+
+	p.match(token.IDENT)
+	p.match(token.EQ)
+
+	p.expr()
+
+	fmt.Println("pop", id)
+
+	p.match(token.SEMICOLON)
 }
 
 func (p *Parser) term() {
