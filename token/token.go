@@ -5,11 +5,18 @@ import "fmt"
 type TokenType string
 
 const (
-	PLUS   TokenType = "PLUS"
-	MINUS  TokenType = "MINUS"
+	PLUS      TokenType = "PLUS"
+	MINUS     TokenType = "MINUS"
+	EQ        TokenType = "EQ"
+	SEMICOLON TokenType = "SEMICOLON"
+
+	// Literals.
 	NUMBER TokenType = "NUMBER"
 	IDENT  TokenType = "IDENT"
-	EOF    TokenType = "EOF"
+
+	LET TokenType = "LET"
+
+	EOF TokenType = "EOF"
 )
 
 type Token struct {

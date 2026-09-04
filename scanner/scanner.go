@@ -12,6 +12,10 @@ type Scanner struct {
 	current int
 }
 
+var keywords = map[string]token.TokenType{
+	"let": token.LET,
+}
+
 func NewScanner(input []byte) *Scanner {
 	return &Scanner{
 		input: input,
@@ -65,7 +69,13 @@ func (s *Scanner) identifier() token.Token {
 
 	id := string(s.input[start:s.current])
 
-	return token.NewToken(token.IDENT, id)
+	typeToken, ok := keywords[id]
+
+	if !ok {
+		typeToken = token.IDENT
+	}
+
+	return token.NewToken(typeToken, id)
 }
 
 func (s *Scanner) NextToken() token.Token {
@@ -96,6 +106,14 @@ func (s *Scanner) NextToken() token.Token {
 	case '-':
 		s.advance()
 		return token.NewToken(token.MINUS, "-")
+
+	case '=':
+		s.advance()
+		return token.NewToken(token.EQ, "=")
+
+	case ';':
+		s.advance()
+		return token.NewToken(token.SEMICOLON, ";")
 
 	case '\x00':
 		return token.NewToken(token.EOF, "EOF")
