@@ -26,7 +26,7 @@ func (p *Parser) Parse() {
 }
 
 func (p *Parser) expr() {
-	p.number()
+	p.term()
 	p.oper()
 }
 
@@ -35,16 +35,28 @@ func (p *Parser) number() {
 	p.match(token.NUMBER)
 }
 
+func (p *Parser) term() {
+	switch p.currentToken.Type {
+	case token.NUMBER:
+		p.number()
+	case token.IDENT:
+		fmt.Println("push", p.currentToken.Lexeme)
+		p.match(token.IDENT)
+	default:
+		panic("syntax error")
+	}
+}
+
 func (p *Parser) oper() {
 	switch p.currentToken.Type {
 	case token.PLUS:
 		p.match(token.PLUS)
-		p.number()
+		p.term()
 		fmt.Println("add")
 		p.oper()
 	case token.MINUS:
 		p.match(token.MINUS)
-		p.number()
+		p.term()
 		fmt.Println("sub")
 		p.oper()
 	}
