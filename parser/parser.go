@@ -22,7 +22,7 @@ func NewParser(input []byte) *Parser {
 }
 
 func (p *Parser) Parse() {
-	p.letStatement()
+	p.statements()
 }
 
 func (p *Parser) expr() {
@@ -48,6 +48,30 @@ func (p *Parser) letStatement() {
 	fmt.Println("pop", id)
 
 	p.match(token.SEMICOLON)
+}
+
+func (p *Parser) printStatement() {
+	p.match(token.PRINT)
+	p.expr()
+	fmt.Println("print")
+	p.match(token.SEMICOLON)
+}
+
+func (p *Parser) statement() {
+	switch p.currentToken.Type {
+	case token.LET:
+		p.letStatement()
+	case token.PRINT:
+		p.printStatement()
+	default:
+		panic("syntax error")
+	}
+}
+
+func (p *Parser) statements() {
+	for p.currentToken.Type != token.EOF {
+		p.statement()
+	}
 }
 
 func (p *Parser) term() {

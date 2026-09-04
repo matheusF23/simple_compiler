@@ -13,7 +13,8 @@ type Scanner struct {
 }
 
 var keywords = map[string]token.TokenType{
-	"let": token.LET,
+	"let":   token.LET,
+	"print": token.PRINT,
 }
 
 func NewScanner(input []byte) *Scanner {

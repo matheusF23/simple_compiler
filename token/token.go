@@ -14,7 +14,8 @@ const (
 	NUMBER TokenType = "NUMBER"
 	IDENT  TokenType = "IDENT"
 
-	LET TokenType = "LET"
+	LET   TokenType = "LET"
+	PRINT TokenType = "PRINT"
 
 	EOF TokenType = "EOF"
 )
