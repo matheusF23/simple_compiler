@@ -9,6 +9,8 @@ type CommandType string
 const (
 	ADD   CommandType = "ADD"
 	SUB   CommandType = "SUB"
+	MUL   CommandType = "MUL"
+	DIV   CommandType = "DIV"
 	PUSH  CommandType = "PUSH"
 	POP   CommandType = "POP"
 	PRINT CommandType = "PRINT"

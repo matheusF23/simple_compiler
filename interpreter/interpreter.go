@@ -73,6 +73,16 @@ func (i *Interpreter) Run() {
 			arg1 := i.pop()
 			i.push(arg1 - arg2)
 
+		case MUL:
+			arg2 := i.pop()
+			arg1 := i.pop()
+			i.push(arg1 * arg2)
+
+		case DIV:
+			arg2 := i.pop()
+			arg1 := i.pop()
+			i.push(arg1 / arg2)
+
 		case PUSH:
 			value, ok := i.variables[command.Arg]
 

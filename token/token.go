@@ -7,6 +7,8 @@ type TokenType string
 const (
 	PLUS      TokenType = "PLUS"
 	MINUS     TokenType = "MINUS"
+	MULT      TokenType = "MULT"
+	DIV       TokenType = "DIV"
 	EQ        TokenType = "EQ"
 	SEMICOLON TokenType = "SEMICOLON"
 

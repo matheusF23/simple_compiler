@@ -85,7 +85,7 @@ func (p *Parser) statements() {
 	}
 }
 
-func (p *Parser) term() {
+func (p *Parser) factor() {
 	switch p.currentToken.Type {
 	case token.NUMBER:
 		p.number()
@@ -94,6 +94,26 @@ func (p *Parser) term() {
 		p.match(token.IDENT)
 	default:
 		panic("syntax error")
+	}
+}
+
+func (p *Parser) term() {
+	p.factor()
+	p.termOper()
+}
+
+func (p *Parser) termOper() {
+	switch p.currentToken.Type {
+	case token.MULT:
+		p.match(token.MULT)
+		p.factor()
+		p.emit("mul")
+		p.termOper()
+	case token.DIV:
+		p.match(token.DIV)
+		p.factor()
+		p.emit("div")
+		p.termOper()
 	}
 }
 

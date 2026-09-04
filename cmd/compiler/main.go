@@ -7,9 +7,9 @@ import (
 
 func main() {
 	input := `
-				let a = 42 + 2;
-				let b = 15 + 3;
-				print a + b;
+				let a =7 - 10 / 2;
+				let b = 2 + 3 * 4;
+				print b / a;
 			`
 
 	p := parser.NewParser([]byte(input))

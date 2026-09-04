@@ -108,6 +108,14 @@ func (s *Scanner) NextToken() token.Token {
 		s.advance()
 		return token.NewToken(token.MINUS, "-")
 
+	case '*':
+		s.advance()
+		return token.NewToken(token.MULT, "*")
+
+	case '/':
+		s.advance()
+		return token.NewToken(token.DIV, "/")
+
 	case '=':
 		s.advance()
 		return token.NewToken(token.EQ, "=")
