@@ -8,6 +8,7 @@ const (
 	PLUS   TokenType = "PLUS"
 	MINUS  TokenType = "MINUS"
 	NUMBER TokenType = "NUMBER"
+	IDENT  TokenType = "IDENT"
 	EOF    TokenType = "EOF"
 )
 

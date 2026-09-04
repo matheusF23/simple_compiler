@@ -34,6 +34,16 @@ func (s *Scanner) advance() {
 	}
 }
 
+func isAlpha(c byte) bool {
+	return (c >= 'a' && c <= 'z') ||
+		(c >= 'A' && c <= 'Z') ||
+		c == '_'
+}
+
+func isAlphaNumeric(c byte) bool {
+	return isAlpha(c) || unicode.IsDigit(rune(c))
+}
+
 func (s *Scanner) number() token.Token {
 	start := s.current
 
@@ -46,10 +56,26 @@ func (s *Scanner) number() token.Token {
 	return token.NewToken(token.NUMBER, n)
 }
 
+func (s *Scanner) identifier() token.Token {
+	start := s.current
+
+	for isAlphaNumeric(s.peek()) {
+		s.advance()
+	}
+
+	id := string(s.input[start:s.current])
+
+	return token.NewToken(token.IDENT, id)
+}
+
 func (s *Scanner) NextToken() token.Token {
 	s.skipWhitespace()
 
 	ch := s.peek()
+
+	if isAlpha(ch) {
+		return s.identifier()
+	}
 
 	if ch == '0' {
 		s.advance()
