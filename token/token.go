@@ -2,29 +2,14 @@ package token
 
 import "fmt"
 
-type TokenType int
+type TokenType string
 
 const (
-	PLUS TokenType = iota
-	MINUS
-	NUMBER
-	EOF
+	PLUS   TokenType = "PLUS"
+	MINUS  TokenType = "MINUS"
+	NUMBER TokenType = "NUMBER"
+	EOF    TokenType = "EOF"
 )
-
-func (t TokenType) String() string {
-	switch t {
-	case PLUS:
-		return "PLUS"
-	case MINUS:
-		return "MINUS"
-	case NUMBER:
-		return "NUMBER"
-	case EOF:
-		return "EOF"
-	default:
-		return "UNKNOWN"
-	}
-}
 
 type Token struct {
 	Type   TokenType
